@@ -1706,6 +1706,11 @@ if ((int)$revisionDB < 1380) {
     exec_query("INSERT INTO `${p}configuration` VALUES('allowRoundDown', '1');");
 }
 
+if ((int)$revisionDB < 1381) {
+    Logger::logfile("-- update to r1381");
+    exec_query("INSERT INTO `${p}configuration` VALUES('defaultStatusID', '1');");
+}
+
 
 // ============================
 // = update DB version number =
