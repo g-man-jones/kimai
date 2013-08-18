@@ -46,7 +46,7 @@ class Kimai_Invoice_OdtRenderer extends Kimai_Invoice_AbstractRenderer
 
         // fetch variables from model to get values
         $customer   = $this->getModel()->getCustomer();
-        $project    = $this->getModel()->getProject();
+        $projects   = $this->getModel()->getProjects();
         $entries    = $this->getModel()->getEntries();
 
         // ugly but neccessary for tinyButString
@@ -63,7 +63,8 @@ class Kimai_Invoice_OdtRenderer extends Kimai_Invoice_AbstractRenderer
         $GLOBALS['customerMobile']  = $customer['mobile'];
         $GLOBALS['customerURL']     = $customer['homepage'];
         $GLOBALS['customerVat']     = $customer['vat'];
-        $GLOBALS['projectComment']  = $project['comment'];
+        $GLOBALS['projects']        = $projects;
+        $GLOBALS['project'] = implode(', ', array_map(function($project) { return $project['name']; }, $projects));
 
         $doc->mergeXmlBlock('row', $entries);
 

@@ -34,7 +34,7 @@ class Kimai_Invoice_PrintModel
     /**
      * @var array
      */
-    private $project = null;
+    private $projects = array();
     /**
      * @var string
      */
@@ -78,7 +78,7 @@ class Kimai_Invoice_PrintModel
             'vat'           => $this->getVat(),
             'vatRate'       => $this->getVatRate(),
             'total'         => $this->getTotal(),
-            'project'       => $this->getProject(),
+            'projects'      => $this->getProjects(),
             'invoiceId'     => $this->getInvoiceId(),
             'beginDate'     => $this->getBeginDate(),
             'endDate'       => $this->getEndDate(),
@@ -298,19 +298,19 @@ class Kimai_Invoice_PrintModel
     }
 
     /**
-     * @param array $project
+     * @param array $projects
      */
-    public function setProject($project)
+    public function setProjects($projects)
     {
-        $this->project = $project;
+        $this->projects = $projects;
     }
 
     /**
      * @return array
      */
-    public function getProject()
+    public function getProjects()
     {
-        return $this->project;
+        return $this->projects;
     }
 
 

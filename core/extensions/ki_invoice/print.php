@@ -58,7 +58,12 @@ $timeframe       = get_timeframe();
 $in              = $timeframe[0];
 $out             = $timeframe[1];
 
-$timeArray = $database->get_timeSheet($in, $out, null, null, array($_REQUEST['projectID']), null,false,false,$_REQUEST['filter_cleared']);
+if (count($_REQUEST['projectID']) == 0) {
+    echo '<script language="javascript">alert("'.$kga['lang']['ext_invoice']['noProject'].'")</script>';
+    return;
+}
+
+$timeArray = $database->get_timeSheet($in, $out, null, null, $_REQUEST['projectID'], null,false,false,$_REQUEST['filter_cleared']);
 
 if (count($timeArray) == 0) {
     echo '<script language="javascript">alert("'.$kga['lang']['ext_invoice']['noData'].'")</script>';
@@ -72,12 +77,12 @@ $date            = time();
 $month           = $kga['lang']['months'][date("n", $out)-1];
 $year            = date("Y", $out);
 $customer        = $database->customer_get_data($timeArray[0]['customerID']);
-$projectObject   = $database->project_get_data($timeArray[0]['projectID']);
-$project         = html_entity_decode($timeArray[0]['projectName']);
-$customerName    = html_entity_decode($timeArray[0]['customerName']);
+$projectObjects  = array();
+foreach ($_REQUEST['projectID'] as $projectID)
+  $projectObjects[] = $database->project_get_data($projectID);
 $beginDate       = $in;
 $endDate         = $out;
-$invoiceID       = $customerName. "-" . date("y", $in). "-" . date("m", $in);
+$invoiceID       = $customer['name']. "-" . date("y", $in). "-" . date("m", $in);
 $today           = time();
 $dueDate         = mktime(0, 0, 0, date("m") + 1, date("d"), date("Y"));
 
@@ -202,13 +207,9 @@ $model->setVatRate($vat_rate);
 $model->setTotal($gtotal);
 $model->setVat($vat);
 $model->setCustomer($customer);
-$model->setProject($projectObject);
+$model->setProjects($projectObjects);
 $model->setInvoiceId($invoiceID);
 
-/*
-$project         = html_entity_decode($timeArray[0]['projectName']);
-$customerName    = html_entity_decode($timeArray[0]['customerName']);
-*/
 $model->setBeginDate($beginDate);
 $model->setEndDate($endDate);
 $model->setInvoiceDate(time());
